@@ -6,6 +6,14 @@ export const createOne = async (model, data) => {
   }
 };
 
+export const createMany = async (model, data) => {
+  try {
+    return await model.insertMany(data);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const getMany = async (model, query = {}) => {
   // Add pagination/search logic
   try {
