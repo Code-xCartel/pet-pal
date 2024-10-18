@@ -7,6 +7,8 @@ const putPetForAdoption = async (req, res) => {
   if (!pet) {
     return res.status(404).json({ error: "Pet not found" });
   }
+  if (req.userToken.id !== pet.owner_id)
+    return res.status(403).json({ error: "You don't have permission to perform this action, invalid pet-owner combination" });
   const { _id, created_at, updated_at, ...rest } = pet._doc;
   const newQuery = {
     ...rest,
@@ -17,4 +19,16 @@ const putPetForAdoption = async (req, res) => {
   return res.status(200).json({ adoption_created: response._id });
 };
 
-export { putPetForAdoption };
+const cancelAdoption = async (req, res) => {
+  const pet = await getOne(Adoption, req.params.id);
+  if(!pet) return res.status(404).json({ error: "Pet not found" });
+  console.log(req.userToken.id, pet.owner_id)
+  if (req.userToken.id !== pet.owner_id)
+    return res.status(403).json({ error: "You don't have permission to perform this action, invalid pet-owner combination" });
+  const { _id, created_at, updated_at, adoption_status, ...rest } = pet._doc;
+  const response = await createOne(Pets, rest);
+  await deleteOne(Adoption, req.params.id);
+  return res.status(200).json({ adoption_cancelled: response._id });
+};
+
+export { putPetForAdoption, cancelAdoption };

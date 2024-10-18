@@ -24,7 +24,10 @@ const login = async (req, res) => {
   const match = await bcrypt.compare(req.body.password, existingUser.password);
   if(!match)
     return res.status(403).json({ error: 'Invalid credentials' });
-  const token = jwt.sign(req.body, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRY_DELTA });
+  const token = jwt.sign({ ...req.body, username: existingUser.username, id: existingUser._id },
+    JWT_SECRET_KEY,
+    { expiresIn: JWT_EXPIRY_DELTA }
+  );
   return res.status(200).json({ token, accessType: AUTH_METHOD });
 }
 
