@@ -1,16 +1,16 @@
 import validations from "../common.js";
 
 export const registrationValidator = [
-  validations.username,
-  validations.password,
-  validations.email,
+  validations.required('username'),
+  validations.minMax('password', 4, 12),
+  validations.email('email'),
 ];
 
 export const loginValidator = [
-  validations.email,
-  validations.password,
+  validations.email('email'),
+  validations.minMax('password', 4, 12),
 ];
 
 export const userNameValidator = [
-  validations.username,
+  validations.required('username'),
 ]
