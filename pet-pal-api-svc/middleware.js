@@ -10,6 +10,7 @@ const isExcludedFromAuth = (url) => {
 const authMiddleware = (req, res, next) => {
   if (isExcludedFromAuth(req.url)) return next();
   const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).json({ error: 'Token not provided' });
   const [method, token] = authHeader && authHeader.split(' ');
   if (!method || method !== AUTH_METHOD)
     return res.status(401).json({ error: 'Invalid method' });
