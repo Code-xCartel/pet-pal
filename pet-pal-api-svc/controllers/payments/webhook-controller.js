@@ -14,8 +14,8 @@ const webhookController = async (req, res) => {
   }
 
   if (event.type === 'payment_intent.succeeded') {
+    console.log({ event }) // TODO: remove after prod testing
     const session = event.data.object;
-    console.log({ session }); // TODO: remove after prod testing
     const { metadata: { user_id, new_model } } = session;
     await updateOne(User, user_id, { subscription_model: new_model })
   }
