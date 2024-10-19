@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { createOne, getOneByField, updateOne } from "../../database/crud.js";
 import { User } from '../../database/models/auth/auth-model.js';
 import { JWT_SECRET_KEY, JWT_EXPIRY_DELTA, AUTH_METHOD } from "../../constants/secrets.js";
+import SUBSCRIPTION_MODELS from "../../constants/subscription-models.js";
 
 const register = async (req, res) => {
   const existingUser = await getOneByField(User, 'email', req.body.email);
@@ -13,7 +14,7 @@ const register = async (req, res) => {
     ...req.body,
     password,
     isActive: false,
-    subscription_model: 'basic',
+    subscription_model: SUBSCRIPTION_MODELS.get(1).fieldId,
   });
   return res.status(201).json({ userCreated: response?._id });
 };
