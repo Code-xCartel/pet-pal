@@ -1,5 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm, SubmitHandler } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   LoginFormShape,
@@ -44,13 +44,13 @@ const Layout = () => {
 
   return (
     <div className="h-screen flex items-center justify-center bg-[#d2c6ec]">
-      <Tabs defaultValue="account" className="w-[400px]">
+      <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Login</TabsTrigger>
-          <TabsTrigger value="password">Register</TabsTrigger>
+          <TabsTrigger value="login">Login</TabsTrigger>
+          <TabsTrigger value="register">Register</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="account">
+        <TabsContent value="login">
           <Card>
             <CardHeader>
               <CardTitle>Login</CardTitle>
@@ -66,7 +66,7 @@ const Layout = () => {
                     placeholder="john doe"
                     {...loginRegister("username")}
                   />
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-[12px]">
                     {loginErrors.username?.message}
                   </span>
                 </div>
@@ -78,7 +78,7 @@ const Layout = () => {
                     placeholder="password"
                     {...loginRegister("password")}
                   />
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-[12px]">
                     {loginErrors.password?.message}
                   </span>
                 </div>
@@ -90,7 +90,7 @@ const Layout = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="password">
+        <TabsContent value="register">
           <Card>
             <CardHeader>
               <CardTitle>Register</CardTitle>
@@ -106,7 +106,7 @@ const Layout = () => {
                     placeholder="john"
                     {...registerRegister("username")}
                   />
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-[12px]">
                     {registerErrors.username?.message}
                   </span>
                 </div>
@@ -118,7 +118,7 @@ const Layout = () => {
                     placeholder="john@gmail.com"
                     {...registerRegister("email")}
                   />
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-[12px]">
                     {registerErrors.email?.message}
                   </span>
                 </div>
@@ -130,7 +130,7 @@ const Layout = () => {
                     placeholder="@johndoe"
                     {...registerRegister("password")}
                   />
-                  <span className="text-red-500 text-sm">
+                  <span className="text-red-500 text-[12px]">
                     {registerErrors.password?.message}
                   </span>
                 </div>

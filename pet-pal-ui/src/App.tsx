@@ -1,4 +1,3 @@
-import { Button } from "./components/ui/button";
 import Layout from "./pages/auth/Layout";
 
 const App = () => {
