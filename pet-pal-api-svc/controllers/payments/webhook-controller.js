@@ -13,8 +13,7 @@ const webhookController = async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  if (event.type === 'payment_intent.succeeded') {
-    console.log({ event }) // TODO: remove after prod testing
+  if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const { metadata: { user_id, new_model } } = session;
     await updateOne(User, user_id, { subscription_model: new_model })
