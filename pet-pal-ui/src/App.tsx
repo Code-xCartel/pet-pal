@@ -1,10 +1,10 @@
 import { Button } from "./components/ui/button";
+import Layout from "./pages/auth/Layout";
 
 const App = () => {
   return (
     <div className="bg-slate-600">
-      App
-      <Button>hello world</Button>
+      <Layout />
     </div>
   );
 };
