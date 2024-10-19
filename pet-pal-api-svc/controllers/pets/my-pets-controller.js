@@ -1,5 +1,5 @@
 import { createMany, getMany, getOne, updateOne } from "../../database/crud.js";
-import { Pets } from "../../database/models/pets/my-pets.js";
+import { PetsModel } from "../../database/models/pets/my-pets-model.js";
 
 const demoPets = [
   {
@@ -115,7 +115,7 @@ const demoPets = [
 ];
 
 const createMyPets = async (req, res) => {
-  const response = await createMany(Pets, demoPets);
+  const response = await createMany(PetsModel, demoPets);
   return res.status(201).json({ petCreated: response.map(it => it._id) });
 };
 
@@ -125,21 +125,21 @@ const getMyPets = async (req, res) => {
       $in: req.params.owner_id,
     }
   };
-  const response = await getMany(Pets, query);
+  const response = await getMany(PetsModel, query);
   return  res.status(201).json(response);
 };
 
 const getMySinglePet = async (req, res) => {
-  const response = await getOne(Pets, req.params.id);
+  const response = await getOne(PetsModel, req.params.id);
   return  res.status(200).json(response);
 }
 
 const updateMyPet = async (req, res) => {
-  const existingPet = await getOne(Pets, req.params.id);
+  const existingPet = await getOne(PetsModel, req.params.id);
   if(!existingPet) {
     return res.status(404).json({ error: 'Pet not found' });
   }
-  const response = await updateOne(Pets, req.params.id, req.body);
+  const response = await updateOne(PetsModel, req.params.id, req.body);
   return res.status(200).json({ petUpdated: response._id });
 }
 

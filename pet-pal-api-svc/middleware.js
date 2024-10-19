@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { AUTH_METHOD, JWT_SECRET_KEY } from "./constants/secrets.js";
 
-const excludeFromAuth = ['/auth/login', '/auth/register'];
+const excludeFromAuth = ['/auth/login', '/auth/register', '/payments/webhook'];
 
 const isExcludedFromAuth = (url) => {
   return excludeFromAuth.includes(url);

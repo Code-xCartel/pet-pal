@@ -24,4 +24,4 @@ const petSchema = new mongoose.Schema({
   adoption_status: { type: String, enum: ['available', 'pending'] },
 }, { timestamps: true })
 
-export const Adoption = mongoose.model('Adoption', petSchema);
+export const AdoptionModel = mongoose.model('Adoption', petSchema);

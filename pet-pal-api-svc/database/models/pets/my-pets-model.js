@@ -23,4 +23,4 @@ const petSchema = new mongoose.Schema({
   photo_url: String,
 }, { timestamps: true })
 
-export const Pets = mongoose.model('Pets', petSchema);
+export const PetsModel = mongoose.model('Pets', petSchema);

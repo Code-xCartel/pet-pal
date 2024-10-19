@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { createOne, getOneByField, updateOne } from "../../database/crud.js";
-import { User } from '../../database/models/auth/auth.js';
+import { User } from '../../database/models/auth/auth-model.js';
 import { JWT_SECRET_KEY, JWT_EXPIRY_DELTA, AUTH_METHOD } from "../../constants/secrets.js";
 
 const register = async (req, res) => {
@@ -13,6 +13,7 @@ const register = async (req, res) => {
     ...req.body,
     password,
     isActive: false,
+    subscription_model: 'basic',
   });
   return res.status(201).json({ userCreated: response?._id });
 };
@@ -24,7 +25,13 @@ const login = async (req, res) => {
   const match = await bcrypt.compare(req.body.password, existingUser.password);
   if(!match)
     return res.status(403).json({ error: 'Invalid credentials' });
-  const token = jwt.sign({ ...req.body, username: existingUser.username, id: existingUser._id },
+  const token = jwt.sign(
+    {
+      ...req.body,
+      username: existingUser.username,
+      id: existingUser._id,
+      subscription_model: existingUser.subscription_model,
+    },
     JWT_SECRET_KEY,
     { expiresIn: JWT_EXPIRY_DELTA }
   );
