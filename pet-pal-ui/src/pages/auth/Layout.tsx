@@ -43,7 +43,7 @@ const Layout = () => {
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <Tabs defaultValue="login" className="w-[350px] md:w-[400-px]">
+      <Tabs defaultValue="login" className="w-[350px] md:w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="register">Register</TabsTrigger>
@@ -52,7 +52,7 @@ const Layout = () => {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <CardDescription>Login to your existing account.</CardDescription>
+              <CardDescription>Login to your existing PetPal account.</CardDescription>
             </CardHeader>
             <form onSubmit={handleLoginSubmit(onSubmitLogin)}>
               <CardContent className="space-y-2">
@@ -91,7 +91,7 @@ const Layout = () => {
         <TabsContent value="register">
           <Card>
             <CardHeader>
-              <CardDescription>Register a new account.</CardDescription>
+              <CardDescription>Register a new PetPal account.</CardDescription>
             </CardHeader>
             <form onSubmit={handleRegisterSubmit(onSubmitRegister)}>
               <CardContent className="space-y-2">
