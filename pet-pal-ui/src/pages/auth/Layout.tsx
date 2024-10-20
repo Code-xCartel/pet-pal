@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,8 +42,8 @@ const Layout = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-[#d2c6ec]">
-      <Tabs defaultValue="login" className="w-[400px]">
+    <div className="h-screen flex items-center justify-center">
+      <Tabs defaultValue="login" className="w-[350px] md:w-[400-px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>
           <TabsTrigger value="register">Register</TabsTrigger>
@@ -53,7 +52,6 @@ const Layout = () => {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <CardTitle>Login</CardTitle>
               <CardDescription>Login to your existing account.</CardDescription>
             </CardHeader>
             <form onSubmit={handleLoginSubmit(onSubmitLogin)}>
@@ -93,7 +91,6 @@ const Layout = () => {
         <TabsContent value="register">
           <Card>
             <CardHeader>
-              <CardTitle>Register</CardTitle>
               <CardDescription>Register a new account.</CardDescription>
             </CardHeader>
             <form onSubmit={handleRegisterSubmit(onSubmitRegister)}>
