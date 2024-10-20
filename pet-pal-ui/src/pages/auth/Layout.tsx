@@ -1,3 +1,6 @@
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,9 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useForm, SubmitHandler } from "react-hook-form";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   LoginFormShape,
