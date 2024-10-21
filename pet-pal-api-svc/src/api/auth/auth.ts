@@ -5,8 +5,8 @@ import validateRequest from "../../utils/request-validator.js";
 
 const app = Router();
 
-app.post('/register', ...registrationValidator, validateRequest as RequestHandler, register);
-app.post('/login', ...loginValidator, validateRequest as RequestHandler, login);
-app.post('/update', ...userNameValidator, validateRequest as RequestHandler, updateUsername);
+app.post('/register', ...registrationValidator, validateRequest, register);
+app.post('/login', ...loginValidator, validateRequest, login);
+app.post('/update', ...userNameValidator, validateRequest, updateUsername);
 
 export default app;

@@ -10,10 +10,12 @@ import { MetaData } from "./webhook-controller.js";
 
 const stripe = new Stripe(STRIPE_DEV_SECRET_KEY);
 
-const createSubscription = async (req: Request, res: Response) => {
+const createSubscription = async (req: Request, res: Response): Promise<void> => {
   const requested_model = SUBSCRIPTION_MODELS.get(req.body.subscription_model)!;
-  if (requested_model.fieldId === (req as IRequest).userToken.subscription_model)
-    return res.status(403).json({ error: `User is already subscribed to ${requested_model.name} plan` });
+  if (requested_model.fieldId === (req as IRequest).userToken.subscription_model) {
+    res.status(403).json({ error: `User is already subscribed to ${requested_model.name} plan` });
+    return;
+  }
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'subscription',
@@ -26,14 +28,16 @@ const createSubscription = async (req: Request, res: Response) => {
       new_model: requested_model.fieldId,
     } as MetaData,
   });
-  return res.status(200).json({ session });
+  res.status(200).json({ session });
+  return;
 };
 
-const cancelSubscription = async (req: Request, res: Response) => {
+const cancelSubscription = async (req: Request, res: Response): Promise<void> => {
   const response = await updateOne(User, (req as IRequest).userToken.id,
     { subscription_model: SUBSCRIPTION_MODELS.get(1)!.fieldId }
   )
-  return res.status(200).json({ subscription_model: response?.subscription_model });
+  res.status(200).json({ subscription_model: response?.subscription_model });
+  return;
 };
 
 export { createSubscription, cancelSubscription };
