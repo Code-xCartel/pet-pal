@@ -46,6 +46,7 @@ const authMiddleware = (
 	});
 };
 
+//Middleware to validate the request based on the user's subscription level and any request validation errors.
 const validateRequest =
 	(requiredSubscription: SubscriptionPlan = SUBSCRIPTION_LEVELS.BASIC) =>
 	(req: Request, res: Response, next: NextFunction): void => {
