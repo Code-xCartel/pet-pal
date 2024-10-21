@@ -1,7 +1,15 @@
-import { Router, type RequestHandler } from "express";
-import { register, login, updateUsername } from "../../controllers/auth/auth-controller.js";
-import { registrationValidator, loginValidator, userNameValidator } from "../../validators/auth/auth-validator.js";
-import validateRequest from "../../utils/request-validator.js";
+import { Router, type RequestHandler } from 'express';
+import {
+	register,
+	login,
+	updateUsername,
+} from '../../controllers/auth/auth-controller.js';
+import {
+	registrationValidator,
+	loginValidator,
+	userNameValidator,
+} from '../../validators/auth/auth-validator.js';
+import validateRequest from '../../utils/request-validator.js';
 
 const app = Router();
 

@@ -2,12 +2,14 @@ import express, { type RequestHandler } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import 'dotenv/config'
-import { ATLAS_CONNECTION_STRING } from "./constants/secrets.js";
+import 'dotenv/config';
+import { ATLAS_CONNECTION_STRING } from './constants/secrets.js';
 import { authMiddleware } from './middleware.js';
 import allRoutes from './api/api.js';
 
-mongoose.connect(ATLAS_CONNECTION_STRING).then(_=> console.log('db-svc-connected'));
+mongoose
+	.connect(ATLAS_CONNECTION_STRING)
+	.then((_) => console.log('db-svc-connected'));
 const app = express();
 
 app.use(cors());

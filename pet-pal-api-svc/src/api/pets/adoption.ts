@@ -1,7 +1,10 @@
-import { Router } from "express";
-import { putPetForAdoption, cancelAdoption } from "../../controllers/pets/adoption-controller.js";
-import requestValidator from "../../utils/request-validator.js";
-import { idValidator } from "../../validators/common.js";
+import { Router } from 'express';
+import {
+	putPetForAdoption,
+	cancelAdoption,
+} from '../../controllers/pets/adoption-controller.js';
+import requestValidator from '../../utils/request-validator.js';
+import { idValidator } from '../../validators/common.js';
 
 const app = Router();
 
