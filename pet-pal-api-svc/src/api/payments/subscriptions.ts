@@ -3,7 +3,7 @@ import {
 	createSubscription,
 	cancelSubscription,
 } from '../../controllers/payments/subscriptions-controller.js';
-import requestValidator from '../../utils/request-validator.js';
+import { validateRequest } from '../../middleware.js';
 import { createSubscriptionValidator } from '../../validators/payments/subscriptions-validator.js';
 
 const app = Router();
@@ -11,7 +11,7 @@ const app = Router();
 app.post(
 	'/create',
 	...createSubscriptionValidator,
-	requestValidator,
+	validateRequest(),
 	createSubscription
 );
 app.put('/cancel', cancelSubscription);

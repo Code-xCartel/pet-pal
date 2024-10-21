@@ -3,12 +3,12 @@ import {
 	putPetForAdoption,
 	cancelAdoption,
 } from '../../controllers/pets/adoption-controller.js';
-import requestValidator from '../../utils/request-validator.js';
+import { validateRequest } from '../../middleware.js';
 import { idValidator } from '../../validators/common.js';
 
 const app = Router();
 
-app.put('/:id', idValidator('id'), requestValidator, putPetForAdoption);
-app.put('/cancel/:id', idValidator('id'), requestValidator, cancelAdoption);
+app.put('/:id', idValidator('id'), validateRequest(), putPetForAdoption);
+app.put('/cancel/:id', idValidator('id'), validateRequest(), cancelAdoption);
 
 export default app;

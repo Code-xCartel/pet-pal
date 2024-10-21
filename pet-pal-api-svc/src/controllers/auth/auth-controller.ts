@@ -41,7 +41,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 	}
 	const token = jwt.sign(
 		{
-			...req.body,
+			email: req.body.email,
 			username: existingUser.username,
 			id: existingUser._id,
 			subscription_model: existingUser.subscription_model,

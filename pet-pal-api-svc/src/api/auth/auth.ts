@@ -1,4 +1,4 @@
-import { Router, type RequestHandler } from 'express';
+import { Router } from 'express';
 import {
 	register,
 	login,
@@ -9,12 +9,12 @@ import {
 	loginValidator,
 	userNameValidator,
 } from '../../validators/auth/auth-validator.js';
-import validateRequest from '../../utils/request-validator.js';
+import { validateRequest } from '../../middleware.js';
 
 const app = Router();
 
-app.post('/register', ...registrationValidator, validateRequest, register);
-app.post('/login', ...loginValidator, validateRequest, login);
-app.post('/update', ...userNameValidator, validateRequest, updateUsername);
+app.post('/register', ...registrationValidator, validateRequest(), register);
+app.post('/login', ...loginValidator, validateRequest(), login);
+app.post('/update', ...userNameValidator, validateRequest(), updateUsername);
 
 export default app;

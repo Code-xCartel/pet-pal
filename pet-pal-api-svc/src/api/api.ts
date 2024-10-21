@@ -9,4 +9,20 @@ app.use('/auth', authApi);
 app.use('/pets', petsApi);
 app.use('/payments', paymentsApi);
 
+/* gold ----------------------
+  /boarding/live-monitoring
+  /boarding/activity-tracking
+  /telemedicine/doctors
+
+  plus -----------------------
+  /telemedicine/chat
+  /ethical-matcher
+  /play-date
+
+  basic ----------------------
+  /adoption
+  /products
+  /grooming
+*/
+
 export default app;
