@@ -26,7 +26,7 @@ export const getMany = async <T extends Document>(
 	model: Model<T>,
 	query = {}
 ) => {
-	// Add pagination/search logic
+	// TODO: add pagination/search logic
 	try {
 		return await model.find(query);
 	} catch (error: any) {

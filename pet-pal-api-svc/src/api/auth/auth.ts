@@ -13,8 +13,13 @@ import { validateRequest } from '../../middleware.js';
 
 const app = Router();
 
-app.post('/register', ...registrationValidator, validateRequest(), register);
-app.post('/login', ...loginValidator, validateRequest(), login);
+app.post(
+	'/register',
+	...registrationValidator,
+	validateRequest({ skip: true }),
+	register
+);
+app.post('/login', ...loginValidator, validateRequest({ skip: true }), login);
 app.post('/update', ...userNameValidator, validateRequest(), updateUsername);
 
 export default app;

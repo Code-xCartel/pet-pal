@@ -7,3 +7,5 @@ export const STRIPE_DEV_SECRET_KEY = process.env
 	.STRIPE_DEV_SECRET_KEY as string;
 export const STRIPE_DEV_WEBHOOK_KEY = process.env
 	.STRIPE_DEV_WEBHOOK_KEY as string;
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY as string;
+export const OPENAI_API_URL = process.env.OPENAI_API_URL as string;

@@ -1,4 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
+import { type Socket, type ExtendedError } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { AUTH_METHOD, JWT_SECRET_KEY } from './constants/secrets.js';
 import {
@@ -7,12 +8,18 @@ import {
 	SubscriptionPlan,
 } from './constants/subscription-models.js';
 import { validationResult } from 'express-validator';
+import * as fs from 'node:fs';
 
 type UserToken = {
 	email: string;
 	id: string;
 	subscription_model: SubscriptionPlan;
 	username: string;
+};
+
+type RequestValidation = {
+	requiredValidation: SubscriptionPlan;
+	skip: boolean;
 };
 
 export type IRequest = Request & { userToken: UserToken };
@@ -46,11 +53,35 @@ const authMiddleware = (
 	});
 };
 
+const socketMiddleware = (
+	socket: Socket,
+	next: (err?: ExtendedError) => void
+) => {
+	const token = socket.handshake.auth.token as string;
+	if (token) {
+		const [method, tokenString] = token.split(' ');
+		if (!method || method !== AUTH_METHOD) {
+			return next(new Error('Invalid method'));
+		}
+		jwt.verify(tokenString, JWT_SECRET_KEY, (err, decoded) => {
+			if (err) {
+				return next(new Error('Unauthorized'));
+			}
+			socket.data.user = decoded;
+			next();
+		});
+	} else {
+		return next(new Error('Token not provided'));
+	}
+};
+
 //Middleware to validate the request based on the user's subscription level and any request validation errors.
 const validateRequest =
-	(requiredSubscription: SubscriptionPlan = SUBSCRIPTION_LEVELS.BASIC) =>
+	({ requiredSubscription = SUBSCRIPTION_LEVELS.BASIC, skip = false } = {}) =>
 	(req: Request, res: Response, next: NextFunction): void => {
-		const userSubscription = (req as IRequest).userToken.subscription_model;
+		const userSubscription = skip
+			? SUBSCRIPTION_LEVELS.BASIC
+			: (req as IRequest).userToken.subscription_model;
 		if (
 			!(
 				SUBSCRIPTION_INDEX_MAP.indexOf(userSubscription) >=
@@ -70,4 +101,4 @@ const validateRequest =
 		next();
 	};
 
-export { authMiddleware, validateRequest };
+export { authMiddleware, socketMiddleware, validateRequest };
