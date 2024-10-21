@@ -2,7 +2,7 @@ import { body, param } from 'express-validator';
 
 const validations = {
 	paramId: (field: string) =>
-		param(field).isMongoId().withMessage(`${field} is not a valid mongo id`),
+		param(field).isMongoId().withMessage(`${field} is not a valid mongo Id`),
 	required: (field: string) =>
 		body(field).notEmpty().withMessage(`${field} is required`),
 	number: (field: string) => body(field).isNumeric(),
