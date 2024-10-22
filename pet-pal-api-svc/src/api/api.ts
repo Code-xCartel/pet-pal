@@ -14,15 +14,16 @@ app.use('/telemedicine', telemedicineApi);
 /* gold ----------------------
   /boarding/live-monitoring
   /boarding/activity-tracking
-  /telemedicine/doctors
+  /telemedicine/doctors X
 
   plus -----------------------
-  /telemedicine/chat
+  /telemedicine/chat X
   /ethical-matcher
   /play-date
 
   basic ----------------------
-  /adoption
+  /pets/adoption X
+  /pets/my-pets X
   /products
   /grooming
 */

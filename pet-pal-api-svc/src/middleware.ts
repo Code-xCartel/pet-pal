@@ -21,6 +21,7 @@ type UserToken = {
 type RequestValidation = {
 	requiredSubscription?: SubscriptionPlan;
 	requiredAdmin?: boolean;
+	requirePersonnel?: boolean;
 	skip?: boolean;
 };
 
@@ -82,12 +83,20 @@ const validateRequest =
 	({
 		requiredSubscription = SUBSCRIPTION_LEVELS.BASIC,
 		requiredAdmin = false,
+		requirePersonnel = false,
 		skip = false,
 	}: RequestValidation = {}) =>
 	(req: Request, res: Response, next: NextFunction): void => {
 		if (requiredAdmin && !(req as IRequest).userToken.isAdmin) {
 			res.status(401).json({ error: 'Admin permission required' });
 			return;
+		}
+		if (
+			requirePersonnel &&
+			(!(req as IRequest).userToken.isPersonnel ||
+				!(req as IRequest).userToken.isAdmin)
+		) {
+			res.status(401).json({ error: 'Personnel permission required' });
 		}
 		const userSubscription = skip
 			? SUBSCRIPTION_LEVELS.BASIC
