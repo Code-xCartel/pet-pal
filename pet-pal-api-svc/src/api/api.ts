@@ -3,6 +3,7 @@ import authApi from './auth/auth.js';
 import petsApi from './pets/_api.js';
 import paymentsApi from './payments/_api.js';
 import telemedicineApi from './telemedicine/_api.js';
+import shopApi from './products/_api.js';
 
 const app = Router();
 
@@ -10,6 +11,7 @@ app.use('/auth', authApi);
 app.use('/pets', petsApi);
 app.use('/payments', paymentsApi);
 app.use('/telemedicine', telemedicineApi);
+app.use('/products', shopApi);
 
 /* gold ----------------------
   /boarding/live-monitoring

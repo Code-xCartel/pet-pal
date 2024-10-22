@@ -135,6 +135,10 @@ const getMyPets = async (req: Request, res: Response): Promise<void> => {
 
 const getMySinglePet = async (req: Request, res: Response): Promise<void> => {
 	const response = await getOne(PetsModel, req.params.id);
+	if (!response) {
+		res.status(404).json({ error: `Pet not found: ${req.params.id}` });
+		return;
+	}
 	res.status(200).json(response);
 	return;
 };

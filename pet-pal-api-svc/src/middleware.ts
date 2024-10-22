@@ -21,7 +21,7 @@ type UserToken = {
 type RequestValidation = {
 	requiredSubscription?: SubscriptionPlan;
 	requiredAdmin?: boolean;
-	requirePersonnel?: boolean;
+	requiredPersonnel?: boolean;
 	skip?: boolean;
 };
 
@@ -83,7 +83,7 @@ const validateRequest =
 	({
 		requiredSubscription = SUBSCRIPTION_LEVELS.BASIC,
 		requiredAdmin = false,
-		requirePersonnel = false,
+		requiredPersonnel = false,
 		skip = false,
 	}: RequestValidation = {}) =>
 	(req: Request, res: Response, next: NextFunction): void => {
@@ -92,7 +92,7 @@ const validateRequest =
 			return;
 		}
 		if (
-			requirePersonnel &&
+			requiredPersonnel &&
 			(!(req as IRequest).userToken.isPersonnel ||
 				!(req as IRequest).userToken.isAdmin)
 		) {

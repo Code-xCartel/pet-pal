@@ -24,6 +24,17 @@ const validations = {
 			.withMessage(`${field} is required`)
 			.isIn(list)
 			.withMessage(`${field} must be one of ${list}`),
+	nonEmptyArray: (field: string) =>
+		body(field)
+			.notEmpty()
+			.withMessage(`${field} is required`)
+			.isArray()
+			.withMessage(`${field} must be an array`)
+			.custom((arr) => {
+				if (arr.length === 0) {
+					throw new Error(`${field} array should not be empty`);
+				}
+			}),
 };
 
 export const idValidator = (field: string) => validations.paramId(field);
