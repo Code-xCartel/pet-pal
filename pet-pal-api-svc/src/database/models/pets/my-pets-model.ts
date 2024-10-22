@@ -1,7 +1,7 @@
 import mongoose, { type Document } from 'mongoose';
 import { DocumentResult } from '../../common.js';
 
-export type IPet = Document &
+export type Pet = Document &
 	DocumentResult<any> & {
 		name: string;
 		species: string;
@@ -27,7 +27,7 @@ export type IPet = Document &
 		updatedAt?: Date;
 	};
 
-const petSchema = new mongoose.Schema<IPet>(
+const petSchema = new mongoose.Schema<Pet>(
 	{
 		name: { type: String, required: true },
 		species: { type: String, required: true },
@@ -53,4 +53,4 @@ const petSchema = new mongoose.Schema<IPet>(
 	{ timestamps: true }
 );
 
-export const PetsModel = mongoose.model<IPet>('Pets', petSchema);
+export const PetsModel = mongoose.model<Pet>('Pets', petSchema);

@@ -1,6 +1,13 @@
 import { type Request, type Response } from 'express';
-import { createMany, getMany, getOne, updateOne } from '../../database/crud.js';
-import { IPet, PetsModel } from '../../database/models/pets/my-pets-model.js';
+import {
+	createMany,
+	deleteOne,
+	getMany,
+	getOne,
+	updateOne,
+} from '../../database/crud.js';
+import { Pet, PetsModel } from '../../database/models/pets/my-pets-model.js';
+import { IRequest } from '../../middleware.js';
 
 const demoPets = [
 	{
@@ -113,22 +120,16 @@ const demoPets = [
 		special_needs: 'Allergy medications',
 		photo_url: 'https://example.com/photos/bella.jpg',
 	},
-] as IPet[];
-
-const createMyPets = async (req: Request, res: Response): Promise<void> => {
-	const response = await createMany(PetsModel, demoPets);
-	res.status(201).json({ petCreated: response.map((it) => it._id) });
-	return;
-};
+] as Pet[];
 
 const getMyPets = async (req: Request, res: Response): Promise<void> => {
 	const query = {
 		owner_id: {
-			$in: req.params.owner_id,
+			$in: (req as IRequest).userToken.id,
 		},
 	};
-	const response = await getMany(PetsModel, query);
-	res.status(201).json(response);
+	const [count, documents] = await getMany(PetsModel, query);
+	res.status(201).json({ count, results: documents });
 	return;
 };
 
@@ -138,15 +139,33 @@ const getMySinglePet = async (req: Request, res: Response): Promise<void> => {
 	return;
 };
 
+const createMyPets = async (req: Request, res: Response): Promise<void> => {
+	const response = await createMany(PetsModel, demoPets);
+	res
+		.status(201)
+		.json({ message: 'Pets created', pets: response.map((it) => it._id) });
+	return;
+};
+
 const updateMyPet = async (req: Request, res: Response): Promise<void> => {
 	const existingPet = await getOne(PetsModel, req.params.id);
 	if (!existingPet) {
 		res.status(404).json({ error: 'Pet not found' });
 		return;
 	}
-	const response = await updateOne(PetsModel, req.params.id, req.body);
-	res.status(200).json({ petUpdated: response?._id });
+	await updateOne(PetsModel, req.params.id, req.body);
+	res.status(200).json({ message: `Pet updated: ${existingPet._id}` });
 	return;
 };
 
-export { createMyPets, getMyPets, getMySinglePet, updateMyPet };
+const deleteMyPet = async (req: Request, res: Response): Promise<void> => {
+	const existingPet = await getOne(PetsModel, req.params.id);
+	if (!existingPet) {
+		res.status(404).json({ error: 'Pet not found' });
+		return;
+	}
+	await deleteOne(PetsModel, req.params.id);
+	res.status(200).json({ message: `Pet Deleted: ${existingPet._id}` });
+};
+
+export { getMyPets, getMySinglePet, createMyPets, updateMyPet, deleteMyPet };

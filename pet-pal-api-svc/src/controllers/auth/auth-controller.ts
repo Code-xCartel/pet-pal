@@ -17,12 +17,16 @@ const register = async (req: Request, res: Response): Promise<void> => {
 		res.status(403).json({ error: 'Email already exist' });
 		return;
 	}
+	const canCreateAdmins = (req as IRequest).userToken.isAdmin;
 	const password = await bcrypt.hash(req.body.password, 10);
 	const response = await createOne(User, {
-		...req.body,
+		username: req.body.username,
+		email: req.body.email,
 		password,
 		isActive: false,
 		subscription_model: SUBSCRIPTION_MODELS.get(1)!.fieldId,
+		isAdmin: canCreateAdmins && req.body.isAdmin,
+		isPersonnel: canCreateAdmins && req.body.isPersonnel,
 	});
 	res.status(201).json({ userCreated: response?._id });
 	return;

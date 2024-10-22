@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { IPet } from './my-pets-model.js';
+import { Pet } from './my-pets-model.js';
 
-type IAdopt = IPet & { adoption_status: 'available' | 'pending' };
+type Adopt = Pet & { adoption_status: 'available' | 'pending' };
 
-const petSchema = new mongoose.Schema<IAdopt>(
+const petSchema = new mongoose.Schema<Adopt>(
 	{
 		name: { type: String, required: true },
 		species: { type: String, required: true },
@@ -30,4 +30,4 @@ const petSchema = new mongoose.Schema<IAdopt>(
 	{ timestamps: true }
 );
 
-export const AdoptionModel = mongoose.model<IAdopt>('Adoption', petSchema);
+export const AdoptionModel = mongoose.model<Adopt>('Adoption', petSchema);

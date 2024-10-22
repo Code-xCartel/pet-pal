@@ -28,7 +28,11 @@ export const getMany = async <T extends Document>(
 ) => {
 	// TODO: add pagination/search logic
 	try {
-		return await model.find(query);
+		const [documents, count] = await Promise.all([
+			model.find(query),
+			model.countDocuments(query),
+		]);
+		return [count, documents];
 	} catch (error: any) {
 		throw new Error(error.message);
 	}

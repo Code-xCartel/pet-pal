@@ -8,18 +8,20 @@ import {
 	SubscriptionPlan,
 } from './constants/subscription-models.js';
 import { validationResult } from 'express-validator';
-import * as fs from 'node:fs';
 
 type UserToken = {
 	email: string;
 	id: string;
 	subscription_model: SubscriptionPlan;
 	username: string;
+	isAdmin: boolean;
+	isPersonnel: boolean;
 };
 
 type RequestValidation = {
-	requiredValidation: SubscriptionPlan;
-	skip: boolean;
+	requiredSubscription?: SubscriptionPlan;
+	requiredAdmin?: boolean;
+	skip?: boolean;
 };
 
 export type IRequest = Request & { userToken: UserToken };
@@ -77,8 +79,16 @@ const socketMiddleware = (
 
 //Middleware to validate the request based on the user's subscription level and any request validation errors.
 const validateRequest =
-	({ requiredSubscription = SUBSCRIPTION_LEVELS.BASIC, skip = false } = {}) =>
+	({
+		requiredSubscription = SUBSCRIPTION_LEVELS.BASIC,
+		requiredAdmin = false,
+		skip = false,
+	}: RequestValidation = {}) =>
 	(req: Request, res: Response, next: NextFunction): void => {
+		if (requiredAdmin && !(req as IRequest).userToken.isAdmin) {
+			res.status(401).json({ error: 'Admin permission required' });
+			return;
+		}
 		const userSubscription = skip
 			? SUBSCRIPTION_LEVELS.BASIC
 			: (req as IRequest).userToken.subscription_model;
@@ -89,7 +99,7 @@ const validateRequest =
 			)
 		) {
 			res
-				.status(403)
+				.status(401)
 				.json({ error: 'Upgrade your plan to access these features.' });
 			return;
 		}

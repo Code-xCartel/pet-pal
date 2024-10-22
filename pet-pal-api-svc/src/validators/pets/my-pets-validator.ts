@@ -1,6 +1,6 @@
 import validations from '../common.js';
 
-export const createPetValidator = [
+export const petsValidator = [
 	validations.required('name'),
 	validations.required('species'),
 	validations.required('breed'),
