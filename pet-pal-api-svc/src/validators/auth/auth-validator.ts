@@ -7,10 +7,10 @@ export const registrationValidator = [
 ];
 
 export const activationValidator = [
-  validations.required('password'),
-  validations.required('userId'),
-  validations.required('key'),
-]
+	validations.required('password'),
+	validations.required('userId'),
+	validations.required('key'),
+];
 
 export const loginValidator = [
 	validations.email('email'),
