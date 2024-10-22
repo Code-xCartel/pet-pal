@@ -26,7 +26,7 @@ app.use('/products', shopApi);
   basic ----------------------
   /pets/adoption X
   /pets/my-pets X
-  /products
+  /products X
   /grooming
 */
 

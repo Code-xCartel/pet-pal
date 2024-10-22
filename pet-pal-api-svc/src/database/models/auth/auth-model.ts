@@ -1,6 +1,6 @@
 import mongoose, { type Document } from 'mongoose';
 
-export type IUser = Document & {
+export type User = Document & {
 	username: string;
 	password: string;
 	email: string;
@@ -10,7 +10,7 @@ export type IUser = Document & {
 	subscription_model: 'basic' | 'plus' | 'gold';
 };
 
-const userSchema = new mongoose.Schema<IUser>({
+const userSchema = new mongoose.Schema<User>({
 	username: String,
 	password: String,
 	email: { type: String, unique: true, required: true },
@@ -24,4 +24,4 @@ const userSchema = new mongoose.Schema<IUser>({
 	},
 });
 
-export const User = mongoose.model<IUser>('User', userSchema);
+export const User = mongoose.model<User>('User', userSchema);

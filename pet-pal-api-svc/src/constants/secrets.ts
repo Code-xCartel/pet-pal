@@ -9,3 +9,8 @@ export const STRIPE_DEV_WEBHOOK_KEY = process.env
 	.STRIPE_DEV_WEBHOOK_KEY as string;
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY as string;
 export const OPENAI_API_URL = process.env.OPENAI_API_URL as string;
+export const MAIL_SERVICE = process.env.MAIL_SERVICE as string;
+export const MAIL_SERVICE_USER = process.env.MAIL_SERVICE_USER as string;
+export const MAIL_SERVICE_PASSWORD = process.env
+	.MAIL_SERVICE_PASSWORD as string;
+export const CLIENT_WORKFLOW_URL = process.env.CLIENT_WORKFLOW_URL as string;

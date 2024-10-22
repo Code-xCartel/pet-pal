@@ -1,7 +1,13 @@
 import { type Response, type Request } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { createOne, getOneByField, updateOne } from '../../database/crud.js';
+import { v4 } from 'uuid';
+import {
+	createOne,
+	getOne,
+	getOneByField,
+	updateOne,
+} from '../../database/crud.js';
 import { User } from '../../database/models/auth/auth-model.js';
 import {
 	JWT_SECRET_KEY,
@@ -10,6 +16,9 @@ import {
 } from '../../constants/secrets.js';
 import SUBSCRIPTION_MODELS from '../../constants/subscription-models.js';
 import { IRequest } from '../../middleware.js';
+import transporter, {
+	generateMailOptions,
+} from '../../utils/mail-transporter.js';
 
 const register = async (req: Request, res: Response): Promise<void> => {
 	const existingUser = await getOneByField(User, 'email', req.body.email);
@@ -18,18 +27,49 @@ const register = async (req: Request, res: Response): Promise<void> => {
 		return;
 	}
 	const canCreateAdmins = (req as IRequest).userToken.isAdmin;
+	const activationKey = v4();
 	const password = await bcrypt.hash(req.body.password, 10);
 	const response = await createOne(User, {
 		username: req.body.username,
 		email: req.body.email,
-		password,
+		password: !canCreateAdmins ? password : `${activationKey}`,
 		isActive: false,
 		subscription_model: SUBSCRIPTION_MODELS.get(1)!.fieldId,
 		isAdmin: canCreateAdmins && req.body.isAdmin,
 		isPersonnel: canCreateAdmins && req.body.isPersonnel,
 	});
-	res.status(201).json({ userCreated: response?._id });
+	if (canCreateAdmins) {
+		transporter.sendMail(
+			generateMailOptions(
+				req.body.email,
+				response._id as string,
+				activationKey
+			),
+			(err, info) => {
+				console.log(err, info);
+				//TODO: handle email error
+			}
+		);
+	}
+	res.status(201).json({ message: `User created: ${response?._id}` });
 	return;
+};
+
+const updatePassword = async (req: Request, res: Response): Promise<void> => {
+	const existingUser = await getOne(User, req.body.id);
+	if (!existingUser) {
+		res.status(404).json({ error: `User not found: ${req.body.id}` });
+		return;
+	}
+	if (existingUser.password !== req.body.key) {
+		res.status(403).json({ error: 'Key mismatch' });
+		return;
+	}
+	const password = await bcrypt.hash(req.body.password, 10);
+	await updateOne(User, existingUser._id as string, { password });
+	res
+		.status(200)
+		.json({ message: `User password updated: ${existingUser._id}` });
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
@@ -70,4 +110,4 @@ const updateUsername = async (req: Request, res: Response): Promise<void> => {
 	return;
 };
 
-export { register, login, updateUsername };
+export { register, updatePassword, login, updateUsername };
