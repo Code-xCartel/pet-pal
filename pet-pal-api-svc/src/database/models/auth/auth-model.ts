@@ -16,20 +16,23 @@ export type User = Document & {
 	};
 };
 
-const userSchema = new mongoose.Schema<User>({
-	username: { type: String, required: true },
-	password: { type: String, required: true },
-	email: { type: String, unique: true, required: true },
-	isActive: Boolean,
-	isAdmin: Boolean,
-	isPersonnelBoarder: Boolean,
-	isPersonnelGroomer: Boolean,
-	subscriptionModel: {
-		type: String,
-		required: true,
-		enum: ['basic', 'plus', 'gold'],
+const userSchema = new mongoose.Schema<User>(
+	{
+		username: { type: String, required: true },
+		password: { type: String, required: true },
+		email: { type: String, unique: true, required: true },
+		isActive: Boolean,
+		isAdmin: Boolean,
+		isPersonnelBoarder: Boolean,
+		isPersonnelGroomer: Boolean,
+		subscriptionModel: {
+			type: String,
+			required: true,
+			enum: ['basic', 'plus', 'gold'],
+		},
+		details: { type: Object },
 	},
-	details: { type: Object },
-});
+	{ timestamps: true }
+);
 
 export const User = mongoose.model<User>('User', userSchema);

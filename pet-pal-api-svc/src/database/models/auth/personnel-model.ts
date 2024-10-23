@@ -13,16 +13,19 @@ export type GroomerBoarder = Document &
 		userRefId: string;
 	};
 
-const groomerBoarderSchema = new mongoose.Schema<GroomerBoarder>({
-	name: { type: String, required: true },
-	contact: { type: String, unique: true, required: true },
-	address: { type: String },
-	isAvailable: { type: Boolean, default: true },
-	petType: { type: [] },
-	timeAvailable: { type: [Number, Number] },
-	city: { type: String },
-	userRefId: { type: String, required: true },
-});
+const groomerBoarderSchema = new mongoose.Schema<GroomerBoarder>(
+	{
+		name: { type: String, required: true },
+		contact: { type: String, unique: true, required: true },
+		address: { type: String },
+		isAvailable: { type: Boolean, default: true },
+		petType: { type: [] },
+		timeAvailable: { type: [Number, Number] },
+		city: { type: String },
+		userRefId: { type: String, required: true },
+	},
+	{ timestamps: true }
+);
 
 export const GroomerModel = mongoose.model<GroomerBoarder>(
 	'Groomer',
