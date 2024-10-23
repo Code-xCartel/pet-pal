@@ -6,6 +6,7 @@ import telemedicineApi from './telemedicine/_api.js';
 import shopApi from './products/_api.js';
 import groomerApi from './groomer/groomer.js';
 import boardingApi from './boarding/_api.js';
+import ethicalMatcherApi from './etical-matcher/ethical-matcher.js';
 
 const app = Router();
 
@@ -16,15 +17,16 @@ app.use('/telemedicine', telemedicineApi);
 app.use('/shop', shopApi);
 app.use('/groomer', groomerApi);
 app.use('/boarding', boardingApi);
+app.use('/ethical-matcher', ethicalMatcherApi);
 
 /* gold ----------------------
   /boarding/live-monitoring X
-  /boarding/activity-tracking
+  /boarding/activity-tracking -
   /telemedicine/doctors X
 
   plus -----------------------
   /telemedicine/chat X
-  /ethical-matcher
+  /ethical-matcher X
   /play-date
   /grooming X
 
