@@ -19,8 +19,74 @@ import {
   LoginSchema,
   RegisterSchema,
 } from "@/utils/types";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/redux/reducers/auth/loginReducer";
+import { AppDispatch, RootState } from "@/redux/store";
+import { register } from "@/redux/reducers/auth/registerReducer";
+import Spinner from "@/components/spinner";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/constants/routes";
+import { useEffect, useState } from "react";
+import { workflowStarted } from "@/utils/auth/workflow";
+import { toast } from "sonner";
 
-const Layout = () => {
+const AuthLayout = () => {
+  const navigate = useNavigate();
+
+  const {
+    loading: loginLoading,
+    error: loginError,
+    isAuthenticated,
+  } = useSelector((state: RootState) => state.auth.login);
+
+  const {
+    loading: registerLoading,
+    error: registerError,
+    isRegistered,
+  } = useSelector((state: RootState) => state.auth.register);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    workflowStarted(dispatch);
+  }, []);
+
+  useEffect(() => {
+    isAuthenticated && navigate(ROUTES.HOME, { replace: true });
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (isRegistered) {
+      toast.success("User created. Please login", {
+        action: {
+          label: "Ok",
+          onClick: () => setTab("login"),
+        },
+      });
+    }
+
+    if (registerError) {
+      toast.error("An error occurred while registering", {
+        description: registerError,
+        action: {
+          label: "Ok",
+          onClick: () => null,
+        },
+      });
+    }
+
+    if (loginError) {
+      toast.error("An error occurred while logging in", {
+        description: loginError,
+        action: {
+          label: "Ok",
+          onClick: () => null,
+        },
+      });
+    }
+  }, [registerError, isRegistered, loginError]);
+
+  const [tab, setTab] = useState("login");
   const {
     register: loginRegister,
     handleSubmit: handleLoginSubmit,
@@ -34,38 +100,53 @@ const Layout = () => {
   } = useForm<RegisterFormShape>({ resolver: zodResolver(RegisterSchema) });
 
   const onSubmitLogin: SubmitHandler<LoginFormShape> = async (data) => {
-    console.log("Login SUCCESS", data);
+    await dispatch(login({ credentials: data }));
   };
 
   const onSubmitRegister: SubmitHandler<RegisterFormShape> = async (data) => {
-    console.log("Registration SUCCESS", data);
+    dispatch(register({ credentials: data }));
   };
 
   return (
     <div className="h-screen flex items-center justify-center">
-      <Tabs defaultValue="login" className="w-[350px] md:w-[400px]">
+      <Tabs defaultValue="login" className="w-[350px] md:w-[400px]" value={tab}>
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Login</TabsTrigger>
-          <TabsTrigger value="register">Register</TabsTrigger>
+          <TabsTrigger
+            value="login"
+            onClick={() => setTab("login")}
+            disabled={registerLoading}
+          >
+            Login
+          </TabsTrigger>
+          <TabsTrigger
+            value="register"
+            onClick={() => setTab("register")}
+            disabled={loginLoading}
+          >
+            Register
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <CardDescription>Login to your existing PetPal account.</CardDescription>
+              <CardDescription>
+                Login to your existing PetPal account.
+              </CardDescription>
             </CardHeader>
             <form onSubmit={handleLoginSubmit(onSubmitLogin)}>
               <CardContent className="space-y-2">
                 <div className="space-y-1">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="email">email</Label>
                   <Input
-                    id="username"
+                    id="email"
                     type="text"
                     placeholder="john doe"
-                    {...loginRegister("username")}
+                    disabled={loginLoading}
+                    {...loginRegister("email")}
                   />
                   <span className="text-red-500 text-[12px]">
-                    {loginErrors.username?.message}
+                    {loginErrors.email?.message}
                   </span>
                 </div>
                 <div className="space-y-1">
@@ -74,6 +155,7 @@ const Layout = () => {
                     id="password"
                     type="password"
                     placeholder="password"
+                    disabled={loginLoading}
                     {...loginRegister("password")}
                   />
                   <span className="text-red-500 text-[12px]">
@@ -82,7 +164,9 @@ const Layout = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit">Login</Button>
+                <Button type="submit">
+                  {loginLoading ? <Spinner /> : "Login"}
+                </Button>
               </CardFooter>
             </form>
           </Card>
@@ -101,6 +185,7 @@ const Layout = () => {
                     id="username"
                     type="text"
                     placeholder="john"
+                    disabled={registerLoading}
                     {...registerRegister("username")}
                   />
                   <span className="text-red-500 text-[12px]">
@@ -113,6 +198,7 @@ const Layout = () => {
                     id="email"
                     type="email"
                     placeholder="john@gmail.com"
+                    disabled={registerLoading}
                     {...registerRegister("email")}
                   />
                   <span className="text-red-500 text-[12px]">
@@ -125,6 +211,7 @@ const Layout = () => {
                     id="password"
                     type="password"
                     placeholder="@johndoe"
+                    disabled={registerLoading}
                     {...registerRegister("password")}
                   />
                   <span className="text-red-500 text-[12px]">
@@ -133,7 +220,9 @@ const Layout = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit">Register</Button>
+                <Button type="submit">
+                  {registerLoading ? <Spinner /> : "Register"}
+                </Button>
               </CardFooter>
             </form>
           </Card>
@@ -143,4 +232,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default AuthLayout;
