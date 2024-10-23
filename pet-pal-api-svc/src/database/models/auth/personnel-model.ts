@@ -6,7 +6,6 @@ export type GroomerBoarder = Document &
 		name: string;
 		contact: string;
 		address: string;
-		isAvailable: boolean;
 		petType: string[];
 		timeAvailable: [number, number];
 		city: string;
@@ -18,7 +17,6 @@ const groomerBoarderSchema = new mongoose.Schema<GroomerBoarder>(
 		name: { type: String, required: true },
 		contact: { type: String, unique: true, required: true },
 		address: { type: String },
-		isAvailable: { type: Boolean, default: true },
 		petType: { type: [] },
 		timeAvailable: { type: [Number, Number] },
 		city: { type: String },

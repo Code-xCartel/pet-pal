@@ -99,6 +99,20 @@ const declineGroomerRequest = async (
 	return;
 };
 
+const completeGroomerRequest = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	const existingRequest = await getOne(GroomerRequestModel, req.params.id);
+	if (!existingRequest) {
+		res.status(400).send({ error: `Request not found: ${req.params.id}` });
+		return;
+	}
+	await deleteOne(GroomerRequestModel, req.params.id);
+	res.status(200).json({ message: `Request completed ${req.params.id}` });
+	return;
+};
+
 export {
 	getGroomers,
 	getGroomerRequests,
@@ -106,4 +120,5 @@ export {
 	cancelGroomerRequest,
 	acceptGroomerRequest,
 	declineGroomerRequest,
+	completeGroomerRequest,
 };

@@ -6,10 +6,12 @@ import {
 	createGroomerRequest,
 	acceptGroomerRequest,
 	declineGroomerRequest,
+	completeGroomerRequest,
 } from '../../controllers/groomer/groomer-controller.js';
 import { idValidator } from '../../validators/common.js';
 import { validateRequest } from '../../middleware.js';
 import { SUBSCRIPTION_LEVELS } from '../../constants/subscription-models.js';
+import { groomerValidator } from '../../validators/groomer/groomer-validator.js';
 
 const app = Router();
 
@@ -26,26 +28,33 @@ app.get(
 app.post(
 	'/book/:id',
 	idValidator('id'),
+	...groomerValidator,
 	validateRequest({ requiredSubscription: SUBSCRIPTION_LEVELS.PLUS }),
 	createGroomerRequest
 );
-app.post(
+app.put(
 	'cancel/:id',
 	idValidator('id'),
 	validateRequest({ requiredSubscription: SUBSCRIPTION_LEVELS.PLUS }),
 	cancelGroomerRequest
 );
-app.post(
+app.put(
 	'/accept/:id',
 	idValidator('id'),
 	validateRequest({ requiredPersonnelGroomer: true }),
 	acceptGroomerRequest
 );
-app.post(
+app.put(
 	'/decline/:id',
 	idValidator('id'),
 	validateRequest({ requiredPersonnelGroomer: true }),
 	declineGroomerRequest
+);
+app.put(
+	'/complete/:id',
+	idValidator('id'),
+	validateRequest({ requiredPersonnelGroomer: true }),
+	completeGroomerRequest
 );
 
 export default app;

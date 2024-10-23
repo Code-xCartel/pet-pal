@@ -1,5 +1,6 @@
 import mongoose, { type Document } from 'mongoose';
 import { DocumentResult } from '../../common.js';
+import { SUBSCRIPTION_LEVELS } from '../../../constants/subscription-models.js';
 
 export type Request = Document &
 	DocumentResult<any> & {
@@ -8,22 +9,33 @@ export type Request = Document &
 		petType: string;
 		petId: string;
 		timeSlot: [number, number];
-		status: 'pending' | 'rejected' | 'accepted';
+		userSubscriptionModel: string;
+		status: 'pending' | 'rejected' | 'accepted' | 'started';
+		sessionId?: string;
 	};
 
-const groomerRequestSchema = new mongoose.Schema<Request>(
+const boarderRequestSchema = new mongoose.Schema<Request>(
 	{
 		requesterId: { type: String, required: true },
 		requestedId: { type: String, required: true },
 		petType: { type: String, required: true },
 		petId: { type: String, required: true },
 		timeSlot: { type: [Number, Number], required: true },
-		status: { type: String, enum: ['pending', 'accepted', 'rejected'] },
+		userSubscriptionModel: {
+			type: String,
+			required: true,
+			enum: SUBSCRIPTION_LEVELS,
+		},
+		status: {
+			type: String,
+			enum: ['pending', 'accepted', 'rejected', 'started'],
+		},
+		sessionId: { type: String },
 	},
 	{ timestamps: true }
 );
 
-export const GroomerRequestModel = mongoose.model<Request>(
+export const BoarderRequestModel = mongoose.model<Request>(
 	'Requests',
-	groomerRequestSchema
+	boarderRequestSchema
 );
