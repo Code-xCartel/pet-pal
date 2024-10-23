@@ -15,13 +15,15 @@ type UserToken = {
 	subscription_model: SubscriptionPlan;
 	username: string;
 	isAdmin: boolean;
-	isPersonnel: boolean;
+	isPersonnelBoarder: boolean;
+	isPersonnelGroomer: boolean;
 };
 
 type RequestValidation = {
 	requiredSubscription?: SubscriptionPlan;
 	requiredAdmin?: boolean;
-	requiredPersonnel?: boolean;
+	requiredPersonnelBoarder?: boolean;
+	requiredPersonnelGroomer?: boolean;
 	skip?: boolean;
 };
 
@@ -83,7 +85,8 @@ const validateRequest =
 	({
 		requiredSubscription = SUBSCRIPTION_LEVELS.BASIC,
 		requiredAdmin = false,
-		requiredPersonnel = false,
+		requiredPersonnelBoarder = false,
+		requiredPersonnelGroomer = false,
 		skip = false,
 	}: RequestValidation = {}) =>
 	(req: Request, res: Response, next: NextFunction): void => {
@@ -92,11 +95,20 @@ const validateRequest =
 			return;
 		}
 		if (
-			requiredPersonnel &&
-			(!(req as IRequest).userToken.isPersonnel ||
+			requiredPersonnelBoarder &&
+			(!(req as IRequest).userToken.isPersonnelBoarder ||
 				!(req as IRequest).userToken.isAdmin)
 		) {
 			res.status(401).json({ error: 'Personnel permission required' });
+			return;
+		}
+		if (
+			requiredPersonnelGroomer &&
+			(!(req as IRequest).userToken.isPersonnelGroomer ||
+				!(req as IRequest).userToken.isAdmin)
+		) {
+			res.status(401).json({ error: 'Personnel permission required' });
+			return;
 		}
 		const userSubscription = skip
 			? SUBSCRIPTION_LEVELS.BASIC

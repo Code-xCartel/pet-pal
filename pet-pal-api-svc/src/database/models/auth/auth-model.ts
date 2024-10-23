@@ -6,22 +6,30 @@ export type User = Document & {
 	email: string;
 	isActive: boolean;
 	isAdmin: boolean;
-	isPersonnel: boolean;
-	subscription_model: 'basic' | 'plus' | 'gold';
+	isPersonnelBoarder: boolean;
+	isPersonnelGroomer: boolean;
+	subscriptionModel: 'basic' | 'plus' | 'gold';
+	details: {
+		name: string;
+		contact: string;
+		address: string;
+	};
 };
 
 const userSchema = new mongoose.Schema<User>({
-	username: String,
-	password: String,
+	username: { type: String, required: true },
+	password: { type: String, required: true },
 	email: { type: String, unique: true, required: true },
 	isActive: Boolean,
 	isAdmin: Boolean,
-	isPersonnel: Boolean,
-	subscription_model: {
+	isPersonnelBoarder: Boolean,
+	isPersonnelGroomer: Boolean,
+	subscriptionModel: {
 		type: String,
 		required: true,
 		enum: ['basic', 'plus', 'gold'],
 	},
+	details: { type: Object },
 });
 
 export const User = mongoose.model<User>('User', userSchema);

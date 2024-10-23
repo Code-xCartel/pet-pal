@@ -17,4 +17,15 @@ export const loginValidator = [
 	validations.minMax('password', 4, 12),
 ];
 
-export const userNameValidator = [validations.required('username')];
+export const userUpdateValidator = [
+	validations.required('name'),
+	validations.required('contact'),
+	validations.required('address'),
+];
+
+export const groomerBoarderValidator = [
+	validations.required('name'),
+	validations.required('contact'),
+	validations.nonEmptyArray('petType'),
+	validations.required('city'),
+];

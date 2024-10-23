@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { v4 } from 'uuid';
 import {
 	createOne,
+	deleteOne,
 	getOne,
 	getOneByField,
 	updateOne,
@@ -19,6 +20,10 @@ import { IRequest } from '../../middleware.js';
 import transporter, {
 	generateMailOptions,
 } from '../../utils/mail-transporter.js';
+import {
+	BoarderModel,
+	GroomerModel,
+} from '../../database/models/auth/personnel-model.js';
 
 const register = async (req: Request, res: Response): Promise<void> => {
 	const existingUser = await getOneByField(User, 'email', req.body.email);
@@ -34,9 +39,10 @@ const register = async (req: Request, res: Response): Promise<void> => {
 		email: req.body.email,
 		password: !canCreateAdmins ? password : `${activationKey}`,
 		isActive: false,
-		subscription_model: SUBSCRIPTION_MODELS.get(1)!.fieldId,
+		subscriptionModel: SUBSCRIPTION_MODELS.get(1)!.fieldId,
 		isAdmin: canCreateAdmins && req.body.isAdmin,
-		isPersonnel: canCreateAdmins && req.body.isPersonnel,
+		isPersonnelBoarder: canCreateAdmins && req.body.isPersonnelBoarder,
+		isPersonnelGroomer: canCreateAdmins && req.body.isPersonnelGroomer,
 	});
 	if (canCreateAdmins) {
 		transporter.sendMail(
@@ -45,9 +51,15 @@ const register = async (req: Request, res: Response): Promise<void> => {
 				response._id as string,
 				activationKey
 			),
-			(err, info) => {
-				console.log(err, info);
-				//TODO: handle email error
+			async (err) => {
+				if (err) {
+					await deleteOne(User, response._id as string);
+					res.status(400).json({
+						error: 'Error sending activation email, try again',
+						details: err,
+					});
+					return;
+				}
 			}
 		);
 	}
@@ -88,7 +100,10 @@ const login = async (req: Request, res: Response): Promise<void> => {
 			email: req.body.email,
 			username: existingUser.username,
 			id: existingUser._id,
-			subscription_model: existingUser.subscription_model,
+			subscription_model: existingUser.subscriptionModel,
+			isAdmin: existingUser.isAdmin,
+			isPersonnelBoarder: existingUser.isPersonnelBoarder,
+			isPersonnelGroomer: existingUser.isPersonnelGroomer,
 		},
 		JWT_SECRET_KEY,
 		{ expiresIn: JWT_EXPIRY_DELTA }
@@ -97,17 +112,60 @@ const login = async (req: Request, res: Response): Promise<void> => {
 	return;
 };
 
-const updateUsername = async (req: Request, res: Response): Promise<void> => {
-	const existingUser = await getOneByField(
-		User,
-		'email',
-		(req as IRequest).userToken.email
-	);
-	const response = await updateOne(User, existingUser?._id as string, {
-		username: req.body.username,
+const updateUser = async (req: Request, res: Response): Promise<void> => {
+	const existingUser = await getOne(User, (req as IRequest).userToken.id);
+	if (!existingUser) {
+		res.status(404).json({ error: `User doesn't exist` });
+		return;
+	}
+	await updateOne(User, existingUser._id as string, {
+		isActive: true,
+		details: req.body,
 	});
-	res.status(200).json({ usernameUpdated: response?.username });
+	res
+		.status(200)
+		.json({ message: `User details updated: ${existingUser._id}` });
+};
+
+const boardGroomer = async (req: Request, res: Response): Promise<void> => {
+	const existingUser = await getOne(User, (req as IRequest).userToken.id);
+	if (!existingUser) {
+		res.status(404).json({ error: `User doesn't exist` });
+		return;
+	}
+	const response = await createOne(GroomerModel, {
+		...req.body,
+		userRefId: existingUser._id,
+	});
+	await updateOne(User, existingUser._id as string, {
+		isActive: true,
+	});
+	res.status(200).json({ message: `Groomer boarder: ${response._id}` });
 	return;
 };
 
-export { register, updatePassword, login, updateUsername };
+const boardBoarder = async (req: Request, res: Response): Promise<void> => {
+	const existingUser = await getOne(User, (req as IRequest).userToken.id);
+	if (!existingUser) {
+		res.status(404).json({ error: `User doesn't exist` });
+		return;
+	}
+	const response = await createOne(BoarderModel, {
+		...req.body,
+		userRefId: existingUser._id,
+	});
+	await updateOne(User, existingUser._id as string, {
+		isActive: true,
+	});
+	res.status(200).json({ message: `Boarder boarder: ${response._id}` });
+	return;
+};
+
+export {
+	register,
+	updatePassword,
+	login,
+	updateUser,
+	boardGroomer,
+	boardBoarder,
+};

@@ -11,7 +11,7 @@ app.use('/auth', authApi);
 app.use('/pets', petsApi);
 app.use('/payments', paymentsApi);
 app.use('/telemedicine', telemedicineApi);
-app.use('/products', shopApi);
+app.use('/shop', shopApi);
 
 /* gold ----------------------
   /boarding/live-monitoring
@@ -22,12 +22,12 @@ app.use('/products', shopApi);
   /telemedicine/chat X
   /ethical-matcher
   /play-date
+  /grooming
 
   basic ----------------------
   /pets/adoption X
   /pets/my-pets X
   /products X
-  /grooming
 */
 
 export default app;
