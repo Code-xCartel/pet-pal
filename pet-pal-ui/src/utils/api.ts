@@ -1,7 +1,8 @@
+import axios from "axios";
+
 import { ROUTES } from "@/constants/routes";
 import { getAuthToken } from "./auth/workflow";
 import { baseUrl, redirectKey } from "./constants";
-import axios from "axios";
 
 export const request = async (
   url: string,

@@ -1,6 +1,7 @@
-import { POST } from "@/utils/api";
 import { createSession } from "@/utils/auth/session";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import { POST } from "@/utils/api";
 
 const initialState = {
   error: "",

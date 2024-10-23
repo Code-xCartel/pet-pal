@@ -1,4 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+
 import LoginReducer from "./reducers/auth/loginReducer";
 import RegisterReducer from "./reducers/auth/registerReducer";
 

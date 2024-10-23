@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/redux/reducers/auth/loginReducer";
+import { AppDispatch, RootState } from "@/redux/store";
+import { register } from "@/redux/reducers/auth/registerReducer";
 
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/spinner";
 import {
   Card,
   CardContent,
@@ -12,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 import {
   LoginFormShape,
@@ -19,16 +28,8 @@ import {
   LoginSchema,
   RegisterSchema,
 } from "@/utils/types";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "@/redux/reducers/auth/loginReducer";
-import { AppDispatch, RootState } from "@/redux/store";
-import { register } from "@/redux/reducers/auth/registerReducer";
-import Spinner from "@/components/spinner";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { useEffect, useState } from "react";
 import { workflowStarted } from "@/utils/auth/workflow";
-import { toast } from "sonner";
 
 const AuthLayout = () => {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
-import { POST } from "@/utils/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import { POST } from "@/utils/api";
 
 const initialState = {
   error: "",

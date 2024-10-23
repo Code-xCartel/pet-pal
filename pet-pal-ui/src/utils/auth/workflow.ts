@@ -1,6 +1,7 @@
 import { logout, validate } from "@/redux/reducers/auth/loginReducer";
-import { accessTokenKey, tokenType, requestMethod } from "../constants";
 import { destroySession, getSession } from "./session";
+
+import { accessTokenKey, tokenType, requestMethod } from "../constants";
 
 export const workflowStarted = (dispatch: any) => {
   dispatch(logout());

@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import { ROUTES } from "./constants/routes";
 import { Toaster } from "sonner";
+
 import ProtectedRoutes from "./utils/auth/protectedRoutes";
-import AppLayout from "./pages/layout";
-import { routesConfig } from "./utils/routesConfig";
-import SubRouteGuard from "./utils/subRouteGuard";
 import AuthLayout from "./pages/auth/authLayout";
+import AppLayout from "./pages/layout";
+import SubRouteGuard from "./utils/subRouteGuard";
+
+import { routesConfig } from "./utils/routesConfig";
+import { ROUTES } from "./constants/routes";
 
 const App = () => {
   return (

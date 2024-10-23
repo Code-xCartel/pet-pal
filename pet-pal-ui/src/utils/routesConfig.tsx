@@ -1,4 +1,3 @@
-import { ROUTES } from "@/constants/routes";
 import Adoption from "@/pages/adoption";
 import Boarding from "@/pages/Boarding";
 import Breeding from "@/pages/Breeding";
@@ -7,6 +6,8 @@ import Home from "@/pages/home";
 import PetSocialNetwork from "@/pages/petSocialNetwork";
 import ProductStore from "@/pages/productStore";
 import VetCare from "@/pages/VetCare";
+
+import { ROUTES } from "@/constants/routes";
 
 export type RouteConfig = {
   path: string;

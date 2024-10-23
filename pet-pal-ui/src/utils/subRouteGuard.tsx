@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { getUser } from "./user";
+
 import Subscriptions from "@/pages/subscriptions";
 import AuthLayout from "@/pages/auth/authLayout";
 
