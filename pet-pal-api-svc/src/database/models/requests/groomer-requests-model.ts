@@ -1,7 +1,7 @@
 import mongoose, { type Document } from 'mongoose';
 import { DocumentResult } from '../../common.js';
 
-export type Request = Document &
+type GRequest = Document &
 	DocumentResult<any> & {
 		requesterId: string;
 		requestedId: string;
@@ -11,7 +11,7 @@ export type Request = Document &
 		status: 'pending' | 'rejected' | 'accepted';
 	};
 
-const groomerRequestSchema = new mongoose.Schema<Request>(
+const groomerRequestSchema = new mongoose.Schema<GRequest>(
 	{
 		requesterId: { type: String, required: true },
 		requestedId: { type: String, required: true },
@@ -23,7 +23,7 @@ const groomerRequestSchema = new mongoose.Schema<Request>(
 	{ timestamps: true }
 );
 
-export const GroomerRequestModel = mongoose.model<Request>(
+export const GroomerRequestModel = mongoose.model<GRequest>(
 	'Requests',
 	groomerRequestSchema
 );

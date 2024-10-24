@@ -2,7 +2,7 @@ import mongoose, { type Document } from 'mongoose';
 import { DocumentResult } from '../../common.js';
 import { SUBSCRIPTION_LEVELS } from '../../../constants/subscription-models.js';
 
-export type Request = Document &
+type BRequest = Document &
 	DocumentResult<any> & {
 		requesterId: string;
 		requestedId: string;
@@ -14,7 +14,7 @@ export type Request = Document &
 		sessionId?: string;
 	};
 
-const boarderRequestSchema = new mongoose.Schema<Request>(
+const boarderRequestSchema = new mongoose.Schema<BRequest>(
 	{
 		requesterId: { type: String, required: true },
 		requestedId: { type: String, required: true },
@@ -35,7 +35,7 @@ const boarderRequestSchema = new mongoose.Schema<Request>(
 	{ timestamps: true }
 );
 
-export const BoarderRequestModel = mongoose.model<Request>(
+export const BoarderRequestModel = mongoose.model<BRequest>(
 	'Requests',
 	boarderRequestSchema
 );
