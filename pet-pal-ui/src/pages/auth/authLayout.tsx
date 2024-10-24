@@ -28,16 +28,13 @@ import {
   RegisterSchema,
 } from "@/utils/types";
 import { workflowStarted } from "@/utils/auth/workflow";
-import { ROUTES } from "@/constants/routes";
 
 const AuthLayout = () => {
   const navigate = useNavigate();
 
-  const {
-    loading: loginLoading,
-    error: loginError,
-    isAuthenticated,
-  } = useAppSelector((state) => state.auth.login);
+  const { loading: loginLoading, error: loginError } = useAppSelector(
+    (state) => state.auth.login
+  );
 
   const {
     loading: registerLoading,
