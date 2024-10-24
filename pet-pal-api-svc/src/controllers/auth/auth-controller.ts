@@ -95,20 +95,19 @@ const login = async (req: Request, res: Response): Promise<void> => {
 		res.status(403).json({ error: 'Invalid credentials' });
 		return;
 	}
-	const token = jwt.sign(
-		{
-			email: req.body.email,
-			username: existingUser.username,
-			id: existingUser._id,
-			subscription_model: existingUser.subscriptionModel,
-			isAdmin: existingUser.isAdmin,
-			isPersonnelBoarder: existingUser.isPersonnelBoarder,
-			isPersonnelGroomer: existingUser.isPersonnelGroomer,
-		},
-		JWT_SECRET_KEY,
-		{ expiresIn: JWT_EXPIRY_DELTA }
-	);
-	res.status(200).json({ token, accessType: AUTH_METHOD });
+	const payload = {
+		email: existingUser.email,
+		username: existingUser.username,
+		id: existingUser._id,
+		subscription_model: existingUser.subscriptionModel,
+		isAdmin: existingUser.isAdmin,
+		isPersonnelBoarder: existingUser.isPersonnelBoarder,
+		isPersonnelGroomer: existingUser.isPersonnelGroomer,
+	};
+	const token = jwt.sign(payload, JWT_SECRET_KEY, {
+		expiresIn: JWT_EXPIRY_DELTA,
+	});
+	res.status(200).json({ token, accessType: AUTH_METHOD, user: payload });
 	return;
 };
 
