@@ -24,6 +24,6 @@ const groomerRequestSchema = new mongoose.Schema<GRequest>(
 );
 
 export const GroomerRequestModel = mongoose.model<GRequest>(
-	'Requests',
+	'Groomer Requests',
 	groomerRequestSchema
 );

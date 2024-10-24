@@ -36,6 +36,6 @@ const boarderRequestSchema = new mongoose.Schema<BRequest>(
 );
 
 export const BoarderRequestModel = mongoose.model<BRequest>(
-	'Requests',
+	'Boarder Requests',
 	boarderRequestSchema
 );
