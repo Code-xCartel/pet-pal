@@ -12,6 +12,17 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActionPaths: [
+          "payload.config",
+          "payload.headers",
+          "payload.request",
+          "meta.arg",
+        ],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
