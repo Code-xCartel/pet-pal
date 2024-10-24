@@ -33,7 +33,10 @@ const register = async (req: Request, res: Response): Promise<void> => {
 	}
 	const canCreateAdmins = (req as IRequest).userToken?.isAdmin || false;
 	const activationKey = v4();
-	const password = await bcrypt.hash(req.body.password, 10);
+	const password = await bcrypt.hash(
+		Buffer.from(req.body.password, 'base64').toString('binary'),
+		10
+	);
 	const response = await createOne(User, {
 		username: req.body.username,
 		email: req.body.email,
