@@ -1,11 +1,11 @@
 import Adoption from "@/pages/adoption";
-import Boarding from "@/pages/Boarding";
-import Breeding from "@/pages/Breeding";
+import Boarding from "@/pages/boarding";
+import Breeding from "@/pages/breeding";
 import Grooming from "@/pages/grooming";
 import Home from "@/pages/home";
 import PetSocialNetwork from "@/pages/petSocialNetwork";
 import ProductStore from "@/pages/productStore";
-import VetCare from "@/pages/VetCare";
+import VetCare from "@/pages/vetCare";
 
 import { ROUTES } from "@/constants/routes";
 

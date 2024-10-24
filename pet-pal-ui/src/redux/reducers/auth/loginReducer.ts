@@ -2,6 +2,8 @@ import { createSession } from "@/utils/auth/session";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { POST } from "@/utils/api";
+import { NavigateFunction } from "react-router-dom";
+import { ROUTES } from "@/constants/routes";
 
 const initialState = {
   error: "",
@@ -18,7 +20,10 @@ export type Credentials = {
 export const login = createAsyncThunk(
   "auth/login",
   async (
-    { credentials }: { credentials: Credentials },
+    {
+      credentials,
+      navigate,
+    }: { credentials: Credentials; navigate: NavigateFunction },
     { rejectWithValue }
   ) => {
     try {
@@ -35,6 +40,7 @@ export const login = createAsyncThunk(
         accessType,
       });
 
+      navigate(ROUTES.HOME, { replace: true });
       return response;
     } catch (error: any) {
       const errorMessage =

@@ -3,10 +3,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/redux/reducers/auth/loginReducer";
-import { AppDispatch, RootState } from "@/redux/store";
 import { register } from "@/redux/reducers/auth/registerReducer";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/spinner";
@@ -28,8 +27,8 @@ import {
   LoginSchema,
   RegisterSchema,
 } from "@/utils/types";
-import { ROUTES } from "@/constants/routes";
 import { workflowStarted } from "@/utils/auth/workflow";
+import { ROUTES } from "@/constants/routes";
 
 const AuthLayout = () => {
   const navigate = useNavigate();
@@ -38,23 +37,19 @@ const AuthLayout = () => {
     loading: loginLoading,
     error: loginError,
     isAuthenticated,
-  } = useSelector((state: RootState) => state.auth.login);
+  } = useAppSelector((state) => state.auth.login);
 
   const {
     loading: registerLoading,
     error: registerError,
     isRegistered,
-  } = useSelector((state: RootState) => state.auth.register);
+  } = useAppSelector((state) => state.auth.register);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     workflowStarted(dispatch);
   }, []);
-
-  useEffect(() => {
-    isAuthenticated && navigate(ROUTES.HOME, { replace: true });
-  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     if (isRegistered) {
@@ -101,7 +96,7 @@ const AuthLayout = () => {
   } = useForm<RegisterFormShape>({ resolver: zodResolver(RegisterSchema) });
 
   const onSubmitLogin: SubmitHandler<LoginFormShape> = async (data) => {
-    await dispatch(login({ credentials: data }));
+    await dispatch(login({ credentials: data, navigate }));
   };
 
   const onSubmitRegister: SubmitHandler<RegisterFormShape> = async (data) => {
@@ -146,7 +141,7 @@ const AuthLayout = () => {
                     disabled={loginLoading}
                     {...loginRegister("email")}
                   />
-                  <span className="text-red-500 text-[12px]">
+                  <span className="text-red-500 text-[10px]">
                     {loginErrors.email?.message}
                   </span>
                 </div>
@@ -159,7 +154,7 @@ const AuthLayout = () => {
                     disabled={loginLoading}
                     {...loginRegister("password")}
                   />
-                  <span className="text-red-500 text-[12px]">
+                  <span className="text-red-500 text-[10px]">
                     {loginErrors.password?.message}
                   </span>
                 </div>
@@ -189,7 +184,7 @@ const AuthLayout = () => {
                     disabled={registerLoading}
                     {...registerRegister("username")}
                   />
-                  <span className="text-red-500 text-[12px]">
+                  <span className="text-red-500 text-[10px]">
                     {registerErrors.username?.message}
                   </span>
                 </div>
@@ -202,7 +197,7 @@ const AuthLayout = () => {
                     disabled={registerLoading}
                     {...registerRegister("email")}
                   />
-                  <span className="text-red-500 text-[12px]">
+                  <span className="text-red-500 text-[10px]">
                     {registerErrors.email?.message}
                   </span>
                 </div>
@@ -215,7 +210,7 @@ const AuthLayout = () => {
                     disabled={registerLoading}
                     {...registerRegister("password")}
                   />
-                  <span className="text-red-500 text-[12px]">
+                  <span className="text-red-500 text-[10px]">
                     {registerErrors.password?.message}
                   </span>
                 </div>

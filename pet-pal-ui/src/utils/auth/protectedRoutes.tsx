@@ -19,7 +19,7 @@ const ProtectedRoutes = () => {
 
   useEffect(() => {
     validateSession(dispatch).then(() => setAutoLoginCheck(true));
-  }, [dispatch]);
+  }, [dispatch, validateSession, setAutoLoginCheck]);
 
   useEffect(() => {
     if (
@@ -31,6 +31,9 @@ const ProtectedRoutes = () => {
         replace: true,
         state: { from: location },
       });
+    }
+    if (isAuthenticated) {
+      navigate(ROUTES.HOME, { replace: true });
     }
   }, [location, isAuthenticated, navigate, autoLoginCheck]);
 
