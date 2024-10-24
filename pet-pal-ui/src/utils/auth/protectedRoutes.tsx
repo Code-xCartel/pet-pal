@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 
-import { RootState } from "@/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 
 import { validateSession } from "./workflow";
 import { ROUTES } from "@/constants/routes";
 
 const ProtectedRoutes = () => {
   const [autoLoginCheck, setAutoLoginCheck] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useSelector(
-    (state: RootState) => state.auth.login
-  );
+  const { isAuthenticated } = useAppSelector((state) => state.auth.login);
 
   useEffect(() => {
-    validateSession(dispatch).then(() => setAutoLoginCheck(true));
-  }, [dispatch, validateSession, setAutoLoginCheck]);
+    if (!autoLoginCheck) {
+      validateSession(dispatch).then(() => setAutoLoginCheck(true));
+    }
+  }, [dispatch, autoLoginCheck]);
 
   useEffect(() => {
     if (
@@ -32,10 +31,7 @@ const ProtectedRoutes = () => {
         state: { from: location },
       });
     }
-    if (isAuthenticated) {
-      navigate(ROUTES.HOME, { replace: true });
-    }
-  }, [location, isAuthenticated, navigate, autoLoginCheck]);
+  }, [location, isAuthenticated, autoLoginCheck, navigate]);
 
   return isAuthenticated ? <Outlet /> : null;
 };
