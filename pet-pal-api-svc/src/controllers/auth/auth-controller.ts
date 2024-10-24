@@ -31,7 +31,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
 		res.status(403).json({ error: 'Email already exist' });
 		return;
 	}
-	const canCreateAdmins = (req as IRequest).userToken.isAdmin;
+	const canCreateAdmins = (req as IRequest).userToken?.isAdmin || false;
 	const activationKey = v4();
 	const password = await bcrypt.hash(req.body.password, 10);
 	const response = await createOne(User, {
