@@ -18,11 +18,9 @@ const createSubscription = async (
 	if (
 		requested_model.fieldId === (req as IRequest).userToken.subscription_model
 	) {
-		res
-			.status(403)
-			.json({
-				error: `User is already subscribed to ${requested_model.name} plan`,
-			});
+		res.status(403).json({
+			error: `User is already subscribed to ${requested_model.name} plan`,
+		});
 		return;
 	}
 	const session = await stripe.checkout.sessions.create({
@@ -46,9 +44,9 @@ const cancelSubscription = async (
 	res: Response
 ): Promise<void> => {
 	const response = await updateOne(User, (req as IRequest).userToken.id, {
-		subscription_model: SUBSCRIPTION_MODELS.get(1)!.fieldId,
+		subscriptionModel: SUBSCRIPTION_MODELS.get(1)!.fieldId,
 	});
-	res.status(200).json({ subscription_model: response?.subscription_model });
+	res.status(200).json({ subscription_model: response?.subscriptionModel });
 	return;
 };
 

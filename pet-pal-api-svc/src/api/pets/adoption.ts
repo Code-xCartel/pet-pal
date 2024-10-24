@@ -14,13 +14,13 @@ const app = Router();
 app.post(
 	'/create',
 	...petsValidator,
-	validateRequest({ requirePersonnel: true }),
+	validateRequest({ requiredAdmin: true }),
 	createPetAdoption
 );
 app.delete(
 	'delete/:id',
 	idValidator('id'),
-	validateRequest({ requirePersonnel: true }),
+	validateRequest({ requiredAdmin: true }),
 	deleteDoctor
 );
 app.put('update/:id', idValidator('id'), validateRequest(), putPetForAdoption);
